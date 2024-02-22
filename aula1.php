@@ -19,7 +19,7 @@
 
 	$nome .= " Antoni"; // concatenando uma string a uma variavel existente
 
-	echo ("Nome: " . $nome . "<br>"); // printando algo na tela, combinando uma mensagem com o conteudo da variavel
+	echo ("Nome: <b> $nome </b> <br>"); // printando algo na tela, combinando uma mensagem com o conteudo da variavel
 
 	// estrutura de decisão
 	if ($idade >= 18){
@@ -42,7 +42,7 @@
 	// exemplo de if aninhado
 	$passou_no_teste = true; //
 
-	iF ($idade >= 18 and $passou_no_teste)
+	iF ($idade >= 18 && $passou_no_teste)
 		ECHO ("Apto a tirar a CNH");
 	else 
 		ecHo ("Não apto a tirar a CNH");
