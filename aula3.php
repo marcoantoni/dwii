@@ -9,9 +9,9 @@
 	echo (date("d/m/Y") );
 
 	// dia da semana
-	// 1 = segunda 7 = domingo
 	echo (date("D") );
 
+	// 1 = segunda 7 = domingo
 	echo $diaSemana = date("N");
 
 	switch($diaSemana) {
