@@ -132,4 +132,6 @@
 
 	print_r($informacao);
 
+	echo (time());
+
 ?>
