@@ -27,6 +27,31 @@
 				<a href="#" class="recuperar_senha">Esqueci minha senha</a>
 			</div>
 		</form>
+		<?php
+			if (isset($_POST["enviar"])){
+				// clicou no botão enviar
+
+				// armazena os inputs em variaveis para não precisar escrever $_POST["variavel"] várias vezes
+				$usuario = $_POST["usuario"];
+				$senha = $_POST["senha"];
+
+				if (!empty($usuario) && !empty($senha)){
+					// aqui dentro fica a lógica de fazer o login
+
+					if ($usuario == "admin" && $senha == "1234"){
+						// acertou o usuario e senha (login ok)
+						session_start();	// inicia a sessão
+						$_SESSION["usuario"] = "admin";		// cria a variavel de sessão que será usada para validar se o usuário está logada
+						header("location: inicio.php"); 	// redireciona para a pagina inicio.php
+					} else {
+						echo ("Usuário ou senha incorretos");
+					}
+
+				} else {
+					echo ("Preencha o usuário e a senha corretamente");
+				}
+			}
+		?>
 	</div>
 </body>
 </html>
