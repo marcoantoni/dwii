@@ -6,13 +6,13 @@ Primeiramente, será necessário importar o banco de dados caso ele não exista.
 Vamos analisar os registros dentro do banco de dados:
 ![Alt text](2.png?raw=true "registros no banco de dados")
 
-A ação de deletar um registro é a mais simples de todas as operações, pois basta chamar uma página responsável por excluir o arquivo, passando como parametro a chave primária do registro a ser excluído, neste caso o `id`. Desta forma, para excluir o aluno de nome **Fernando**, teremos que passar como parametro o `id=2`. Assim, o arquivo **mostrar.php** onde os dados da tabela são apresentados, será preciso inserir o link no botão de **excluir** para que quando o usuário passe o mouse em cima, seja criado um link dinâmico contendo o **id** do usuário, ou seja, quando isso acontececer, o link apontará para o arquivo `excluir.php` passando como parametro o id do aluno e o seu respectivo valor. A parte final do link gerado será similar a isto: **excluir.php?id=2**
+A ação de deletar um registro é a mais simples de todas as operações, pois basta chamar uma página responsável por excluir o registro, passando como parametro a chave primária do registro a ser excluído, neste caso o `id`. Desta forma, para excluir o aluno de nome **Fernando**, teremos que passar como parâmetro o `id=2`. Assim, o arquivo **mostrar.php** onde os dados da tabela são apresentados, será preciso inserir o link no botão de **Excluir** para que quando o usuário passe o mouse em cima, seja criado um link dinâmico contendo o **id** do usuário, dessa forma, quando isso acontececer, o link apontará para o arquivo `excluir.php` e conterá como parêmetro `id` do aluno e o seu respectivo valor. A parte final do link gerado será similar a isto: **excluir.php?id=2**
 
-O botão de excluir está sendo criado na linha 56 do arquivo (disponível desenvolvido na aula), com o tendo o seguinte conteúdo:
+O botão de excluir está sendo criado na linha 56 do arquivo [disponível desenvolvido na aula](https://github.com/marcoantoni/dwii/blob/main/aluno/mostrar.php), tendo o seguinte conteúdo:
 ```php
 <a href=\"#\" class=\"del_btn\">Excluir</a>
 ```
-Será necessário definir o link para a página de edição:
+Será necessário definir o link que aponta para a página de exclusão:
 ```php
 <a href=\"excluir.php?id=$row[id]\" class=\"del_btn\">Excluir</a>
 ```
@@ -21,34 +21,34 @@ Será necessário definir o link para a página de edição:
 
 Agora será necessário criar o arquivo `excluir.php`, que conterá a lógica de exclusão do registro. Esse arquivo deve estar dentro da mesma pasta onde está o arquivo `mostrar.php`.
 
-Dentro desse arquivo, começamos abrindo as tags do PHP e a conexão com o banco de dados sem seguinte.
+Dentro desse arquivo, começamos abrindo as tags do PHP e a conexão com o banco de dados:
 ```php
 <?php
-// ajuste os parametros conforme o seu usuário, senha e banco de dados
+    // ajuste os parametros conforme o seu usuário, senha e banco de dados
 	$conn = mysqli_connect("127.0.0.1", "root", "", "dwii");
 
 	// conexão bem sucedida
 	if ($conn) {
 ```
-Se a conexão com o banco de dados tiver sucesso, podemos prosseguir com a lógica da exclusão. Agora será necessário recuperar o **id** do usuário que está vindo como parametro da página `mostrar.php`. Parametros presentes na URL usam o método GET, por isso, usamos a variavel `$_GET['nomeParametro']` para recuperar o valor presente na URL.
+Se a conexão com o banco de dados tiver sucesso, podemos prosseguir com a lógica da exclusão. Agora será necessário recuperar o **id** do usuário que está vindo como parêmetro da página `mostrar.php`. Parêmetros presentes na URL usam o método GET, por isso, usamos a variável `$_GET['nomeParametro']` para recuperar o valor presente na URL.
 
 ```php
-$id_usuario = (int) $_GET['id'];
+    $id_usuario = (int) $_GET['id'];
 ```
-Aqui é criada a variavel **$id_usuario**  que contém o valor vindo da URL. O *(int)* força a conversão do parêmetro para inteiro, ou seja, se for tentado inserir o parametro 2.1 na URL, o valor recuperado será a parte inteira do número, ou seja, o valor **2**.
+Aqui é criada a variável **$id_usuario**  que contém o valor vindo da URL. O *(int)* força a conversão do parêmetro para inteiro, ou seja, se for tentado inserir o valor 2.1 na URL, o valor recuperado será a parte inteira do número, ou seja, apenas o número **2**.
 
-Depois disso, é necessário criar a consulta SQL responsável por excluir o registro do banco de dados
+Depois disso, é necessário criar a consulta SQL responsável por excluir o registro do banco de dados e armazená-la em uma variável para que ela possa ser executada.
 ```php
-$sql = "DELETE FROM alunos WHERE id = $id_usuario";	
+    $sql = "DELETE FROM alunos WHERE id = $id_usuario";	
 ```
-Nessa consulta, ***alunos*** é a tabela e ``id`` é o nome da chave primária da tabela. `id_aluno` conterá o id do usuário que será excluído, conforme o parâmetro recebido pela URL. Em seguida, é necessário executar a consulta através da função `mysqli_query`. Nas consultas de exclusão, assim como nas de inserção, a função retornará `true` caso ela tenha sido executada com sucesso, por isso, faremos um teste para determinar se o aluno foi ou não excluído.
+Nessa consulta, ***alunos*** é a tabela e ``id`` é o nome da chave primária da tabela. `$id_aluno` conterá o id do usuário que será excluído, conforme o parâmetro recebido pela URL. Em seguida, é necessário executar a consulta através da função `mysqli_query`. Nas consultas de exclusão, assim como nas de inserção, a função retornará `true` caso ela tenha sido executada com sucesso, por isso, faremos um teste para determinar se o aluno foi ou não excluído.
 
 ```php
-if (mysqli_query($conn, $sql) ){
-	echo ("Aluno excluido com sucesso");
-} else {
-	echo ("Houve um erro ao inserir o registro: <br> $sql");
-}
+    if (mysqli_query($conn, $sql) ){
+    	echo ("Aluno excluido com sucesso");
+    } else {
+    	echo ("Houve um erro ao inserir o registro: <br> $sql");
+    }
 ```
 
 Por fim, fechamos a chave do teste da conexão bem sucedida e também fechamos a conexão com o banco de dados e tag do PHP.
@@ -58,10 +58,12 @@ Por fim, fechamos a chave do teste da conexão bem sucedida e também fechamos a
 ?>
 ```
 
-Agora podemos testar o código: Na página responsável por mostrar os registros, ao clicar no botão de *excluir*, você será redirecionado para a página **excluir.php** e deverá ser mostrada a mensagem **Aluno excluido com sucesso**, conforme a imagem a baixo. No momento, essa mensagem ficará fixa, sem redirecionar para outras páginas. Nas próximas aulas, faremos o redirecionamento e armezenaremos essa mensagem na sessão, para então mostrar essa mensagem em outra página, tornando a aplicação mais interativa. 
+Agora podemos testar o código: Na página responsável por mostrar os registros, ao clicar no botão de *excluir*, você será redirecionado para a página **excluir.php** e deverá ser mostrada a mensagem **Aluno excluido com sucesso**, conforme a imagem a baixo.
 ![Alt text](4.png?raw=true "exclusão com sucesso")
 
-O arquivo final terá esse conteúdo. E pode ser acessado [aqui](https://github.com/marcoantoni/dwii/blob/main/aluno/excluir.php).
+ No momento, essa mensagem ficará fixa, sem redirecionamentos para outras páginas. Nas próximas aulas, faremos o redirecionamento e armezenaremos essa mensagem na sessão, para então mostrar essa mensagem em outra página, tornando a aplicação mais interativa. 
+
+O arquivo final ficará assim, e e pode ser acessado [aqui](https://github.com/marcoantoni/dwii/blob/main/aluno/excluir.php).
 ```php
 1. <?php
 2.	
@@ -84,4 +86,8 @@ O arquivo final terá esse conteúdo. E pode ser acessado [aqui](https://github.
 19	mysqli_close($conn);
 20 ?>
 ```
+
+## Exercício de fixação
+Faça o código que permita apagar registros da tabela **cursos** (continuação dos exercícios anteriores).
+ 
 
