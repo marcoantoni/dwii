@@ -4,10 +4,10 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title></title>
-	<link rel="stylesheet" type="text/css" href="main.css">
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
 </head>
 <body>
-	<form method="GET" action="processa.php">
+	<form method="POST" action="salvar.php">
 		
 		<div class="input-group">
 			<label for="nome">Nome</label>
@@ -27,9 +27,9 @@
 		</div>
 		<div class="radio-group">
 			<label for="sexo">Sexo</label> <br>
-			<input type="radio" name="sexo" value="f"> <label for="feminino">Feminino</label> 
-			<input type="radio" name="sexo" value="m"> <label for="masculino">Masculino</label> 
-			<input type="radio" name="sexo" value="i"> <label for="intersexo">Intersexo</label>
+			<input type="radio" name="sexo" value="1"> <label for="feminino">Feminino</label> 
+			<input type="radio" name="sexo" value="2"> <label for="masculino">Masculino</label> 
+			<input type="radio" name="sexo" value="3"> <label for="intersexo">Intersexo</label>
 		</div>
 		Qual seu curso? 
 		<div class="radio-group">

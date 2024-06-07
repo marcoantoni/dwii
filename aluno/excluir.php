@@ -13,7 +13,7 @@
 		if (mysqli_query($conn, $sql) ){
 			echo ("Aluno excluido com sucesso");
 		} else {
-			echo ("Houve um erro ao inserir o registro: <br> $sql");
+			echo ("Houve um erro ao excluir o registro: <br> $sql");
 		}
 	}
 

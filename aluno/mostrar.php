@@ -52,8 +52,8 @@
 					echo ("<td>$row[email]");
 					echo ("<td>$row[telefone]");
 					echo ("<td>
-						<a href=\"#\" class=\"edit_btn\">Editar</a>
-						<a href=\"#\" class=\"del_btn\">Excluir</a>
+						<a href=\"editar.php?id=$row[id]\" class=\"edit_btn\">Editar</a>
+						<a href=\"excluir.php?id=$row[id]\" class=\"del_btn\">Excluir</a>
 					</td>");
 					echo ("</tr>");
 				}
