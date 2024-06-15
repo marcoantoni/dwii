@@ -50,7 +50,9 @@
 			// conexão com o banco com sucesso
 
 			// monta a instrução sql a ser executada
-			$sql = "UPDATE alunos SET nome = '$nome', nascimento = '$nascimento', email = '$email', telefone = '$telefone', sexo = $sexo, curso = '$curso' WHERE id = $id ";
+			// id_curso é o novo campo, que contém a chave estrangeira da tabela curso
+			// a variavel $curso antes continha uma string, agora vai ter um inteiro, pois foi especificado o atributo value no option. Por ser um inteiro, não se usa as aspas
+			$sql = "UPDATE alunos SET nome = '$nome', nascimento = '$nascimento', email = '$email', telefone = '$telefone', sexo = $sexo, id_curso = $curso WHERE id = $id ";
 
 			// mysqli_query executa a consulta sql
 			// se retornar true, a consulta foi executada com sucesso. Em caso de falha, retorna false

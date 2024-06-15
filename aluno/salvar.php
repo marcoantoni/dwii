@@ -4,7 +4,7 @@
 	$nascimento = $_POST["nasc"];
 	$telefone = $_POST["tel"];
 	$sexo = $_POST["sexo"];
-	$curso = $_POST["curso"];
+	$curso = $_POST["curso"];	// essa variavel vai conter o id do curso (definido na tag value)
 	$email = $_POST["email"];
 
 	$erros = [];
@@ -49,12 +49,15 @@
 			// conexão com o banco com sucesso
 
 			// monta a instrução sql a ser executada
-			$sql = "INSERT INTO alunos (nome, nascimento, email, telefone, sexo, curso) VALUES ('$nome', '$nascimento', '$email', '$telefone', $sexo, '$curso')";
+			$sql = "INSERT INTO alunos (nome, nascimento, email, telefone, sexo, id_curso) VALUES ('$nome', '$nascimento', '$email', '$telefone', $sexo, $curso)";
 
 			// mysqli_query executa a consulta sql
 			// se retornar true, a consulta foi executada com sucesso. Em caso de falha, retorna false
 			if (mysqli_query($conn, $sql) ){
-				echo ("Aluno inserido com sucesso");
+				// para poder mostrar a mensagem de sucesso, usamos uma variavel de sessão
+				session_start();
+				$_SESSION["msg_sucesso"] = "Aluno inserido com sucesso";
+				header("location: mostrar.php"); // redirecionamento para a página mostrar.php (retrieve)
 			} else {
 				echo ("Houve um erro ao inserir o registro: <br> $sql");
 			}

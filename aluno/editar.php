@@ -25,6 +25,7 @@
 				$email = $aluno["email"];
 				$tel = $aluno["telefone"];
 				$sexo = $aluno["sexo"];
+				$id_curso = $aluno["id_curso"];	// necessário pegar o id_curso para poder selecionar o curso do usuário no select
 			}
 		} else {
 			die("Houve um erro ao conectar com o banco de dados");
@@ -57,8 +58,23 @@
 		Qual seu curso? 
 		<div class="radio-group">
 			<select name="curso">
-				<option>Análise e Desenvolvimento de Sistemas</option>
-				<option>Tecnologia em Processos Gerenciais</option>
+				<?php
+					// a edição é uma "cópia" da página de criação
+					$conn = mysqli_connect("127.0.0.1", "root", "", "dwii");
+					if ($conn){
+						$sql = "SELECT * FROM cursos ORDER BY nome ASC";
+
+						$registros = mysqli_query($conn, $sql);
+
+						while ($registro = mysqli_fetch_array($registros)) {
+							if ($registro["id"] == $id_curso)	// ao ir adicionando os options, verefica-se o id do curso do usuario $id_curso é igual a chave primária da tabela curso, nesse caso, seleciona-se a opção (selected)
+								echo ("<option value='$registro[id]' selected> $registro[nome]  </option>");
+							else
+								// caso contrario, só adiciona a opção
+								echo ("<option value='$registro[id]'> $registro[nome]  </option>");
+						}
+					}
+				?>
 			</select>
 		</div>
 		<br>

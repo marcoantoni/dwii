@@ -34,8 +34,20 @@
 		Qual seu curso? 
 		<div class="radio-group">
 			<select name="curso">
-				<option>Análise e Desenvolvimento de Sistemas</option>
-				<option>Tecnologia em Processos Gerenciais</option>
+				<option selected>Escolha o curso</option>
+				<?php
+					// para criar o select dinâmico, é necessário fazer uma consutla na tabela que contém as informações
+					$conn = mysqli_connect("127.0.0.1", "root", "", "dwii");
+					if ($conn){
+						$sql = "SELECT * FROM cursos ORDER BY nome ASC";	// consulta SQL a ser executada
+
+						$registros = mysqli_query($conn, $sql);
+
+						while ($registro = mysqli_fetch_array($registros)) {	// percorrendo o result set
+							echo ("<option value='$registro[id]'> $registro[nome]  </option>");	// adiciona os elementos option do select
+						}
+					}
+				?>
 			</select>
 		</div>
 		<br>

@@ -7,6 +7,20 @@
 	<link rel="stylesheet" type="text/css" href="../css/main.css">
 </head>
 <body>
+	<?php session_start(); // inicia a sessão ?> 
+	<!-- testa se a variavel de sessão msg_sucesso existe. Se ela existir, é por que o registro foi inserido com sucesso -->
+	<?php if (isset($_SESSION["msg_sucesso"])): ?>
+		<div class="msg sucesso" id="msg">
+			<?php
+				echo ($_SESSION["msg_sucesso"]);	// printa o conteúdo da variavel
+				unset ($_SESSION["msg_sucesso"]);	// excluí a variavel para a mensagem não ficar repetitiva
+			?>
+		</div>
+	<?php endif ?>
+	<!-- código javascript para ocultar a div msg, após 5 segundos (5000ms) -->
+	<script>
+		setTimeout(() => {document.getElementById("msg").style.display = 'none'; }, 5000 );
+	</script>
 	<h1>Mostrando os alunos cadastrados</h1>
 	<?php
 		// abre a conexão com o bd
@@ -14,7 +28,7 @@
 
 		// conexão bem sucedida
 		if ($conn) {
-			$sql = "SELECT id, nome, DATE_FORMAT(nascimento, '%d/%m/%Y') AS nascimento, email, telefone, sexo, curso FROM alunos;";	// consulta para buscar todos os dados da tabela
+			$sql = "SELECT alunos.id, alunos.nome, DATE_FORMAT(nascimento, '%d/%m/%Y') AS nascimento, email, sexo, telefone, cursos.nome AS curso FROM alunos, cursos WHERE id_curso = cursos.id;";	// consulta para buscar todos os dados da tabela
 
 			// como a consulta é do tipo select, se for executada com sucesso, irá retornar um resultset
 			$resultado = mysqli_query($conn, $sql);
