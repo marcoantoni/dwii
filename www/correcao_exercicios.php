@@ -28,37 +28,50 @@
 
 	//Faça um programa que escreve uma data por extenso, lendo os dados de três variáveis (representando uma data). Exemplo: 15/03/2023 → 15 de março de 2023.
 
-	$dia = 3;
-	$mes = 3;
+	$dia = 15;
+	$mes = 4;
 	$ano = 2026;
 
 	// iniciando a saida com o dia e a preposição de
 	$saida = $dia . " de ";
 
-	if ($mes == 1)
-		$saida .= "janeiro";
-	else if ($mes == 2)
-		$saida .= "fevereiro";
-	else if ($mes == 3)
-		$saida .= "março";
-	else if ($mes == 4)
-		$saida .= "abril";
-	else if ($mes == 5)
-		$saida .= "maio";
-	else if ($mes == 6)
-		$saida .= "junho";
-	else if ($mes == 7)
-		$saida .= "julho";
-	else if ($mes == 8)
-		$saida .= "agosto";
-	else if ($mes == 9)
-		$saida .= "setembro";
-	else if ($mes == 10)
-		$saida .= "outubro";
-	else if ($mes == 11)
-		$saida .= "novembro";
-	else 
-		$saida .= "dezembro";
+	switch($mes){
+		case 1:
+			$saida .= "janeiro";
+			break;
+		case 2:
+			$saida .= "fevereiro";
+			break;
+		case 3:
+			$saida .= "março";
+			break;
+		case 4:
+			$saida .= "abril";
+			break;
+		case 5:
+			$saida .= "maio";
+			break;
+		case 6:
+			$saida .= "junho";
+			break;
+		case 7:
+			$saida .= "julho";
+			break;
+		case 8:
+			$saida .= "agosto";
+			break;
+		case 9:
+			$saida .= "setembro";
+			break;
+		case 10:
+			$saida .= "outubro";
+			break;
+		case 11:
+			$saida .= "novembro";
+			break;
+		default:
+			$saida .= "dezembro";
+	}
 
 	// concatenando o ano a data
 	$saida .= " de " . $ano;
