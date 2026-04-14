@@ -1,7 +1,7 @@
 services:
   php:
-    image: php:8.3-apache
-    container_name: densWebII
+    build: .
+    container_name: desv_web
     ports:
       - "8080:80"
     volumes:
@@ -14,10 +14,8 @@ services:
     container_name: mysql_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: aulasDW
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: desen_web
     ports:
       - "3306:3306"
     volumes:
@@ -32,7 +30,7 @@ services:
     environment:
       PMA_HOST: mysql
       PMA_USER: root
-      PMA_PASSWORD: root
+      PMA_PASSWORD: 1234
     depends_on:
       - mysql
 
