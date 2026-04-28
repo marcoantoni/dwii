@@ -20,86 +20,98 @@
     <div class="container">
         <h4>Clientes Cadastrados</h4>
 
-        <table class="striped highlight responsive-table">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Nascimento</th>
-                    <th>Telefone</th>
-                    <th>Email</th>
-                    <th>Sexo</th>
-                    <th>Bancos</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
+        <?php
+            // Inclui o arquivo responsável pela conexão com o banco de dados
+            // require_once garante que o arquivo será carregado apenas uma vez
+            // e interrompe o sistema caso ele não exista
+            require_once("../conecta.php");
 
-            <tbody>
-                <tr>
-                    <td>João Silva</td>
-                    <td>1990-05-10</td>
-                    <td>(11) 99999-1111</td>
-                    <td>joao@email.com</td>
-                    <td>Masculino</td>
-                    <td>BB, Itaú</td>
-                    <td>
-                        <a class="btn-small blue"><i class="material-icons">edit</i></a>
-                        <a class="btn-small red"><i class="material-icons">delete</i></a>
-                    </td>
-                </tr>
+            // Monta a consulta SQL para buscar todos os clientes
+            // ORDER BY nome ASC → ordena os resultados pelo nome em ordem alfabética
+            $sql = "SELECT * FROM clientes ORDER BY nome ASC";
 
-                <tr>
-                    <td>Maria Souza</td>
-                    <td>1985-08-22</td>
-                    <td>(21) 98888-2222</td>
-                    <td>maria@email.com</td>
-                    <td>Feminino</td>
-                    <td>Nubank</td>
-                    <td>
-                        <a class="btn-small blue"><i class="material-icons">edit</i></a>
-                        <a class="btn-small red"><i class="material-icons">delete</i></a>
-                    </td>
-                </tr>
+            // Executa a consulta no banco de dados
+            // $resultado armazenará o conjunto de dados retornado (result set)
+            $resultado = mysqli_query($conn, $sql);
 
-                <tr>
-                    <td>Carlos Lima</td>
-                    <td>2000-01-15</td>
-                    <td>(31) 97777-3333</td>
-                    <td>carlos@email.com</td>
-                    <td>Masculino</td>
-                    <td>Bradesco, BB</td>
-                    <td>
-                        <a class="btn-small blue"><i class="material-icons">edit</i></a>
-                        <a class="btn-small red"><i class="material-icons">delete</i></a>
-                    </td>
-                </tr>
+            // mysqli_num_rows conta quantas linhas tem um result set
+            // Verifica se a consulta retornou algum registro
+            if (mysqli_num_rows($resultado) > 0) {
 
-                <tr>
-                    <td>Ana Pereira</td>
-                    <td>1995-12-03</td>
-                    <td>(41) 96666-4444</td>
-                    <td>ana@email.com</td>
-                    <td>Feminino</td>
-                    <td>Itaú</td>
-                    <td>
-                        <a class="btn-small blue"><i class="material-icons">edit</i></a>
-                        <a class="btn-small red"><i class="material-icons">delete</i></a>
-                    </td>
-                </tr>
+                // Se houver registros, começa a montar a tabela HTML dinamicamente
+                echo ('
+                    <table class="striped highlight responsive-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Nascimento</th>
+                                <th>Telefone</th>
+                                <th>Email</th>
+                                <th>Sexo</th>
+                                <th>Bancos</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
 
-                <tr>
-                    <td>Lucas Martins</td>
-                    <td>1988-07-19</td>
-                    <td>(51) 95555-5555</td>
-                    <td>lucas@email.com</td>
-                    <td>Masculino</td>
-                    <td>Nubank, Bradesco</td>
-                    <td>
-                        <a class="btn-small blue"><i class="material-icons">edit</i></a>
-                        <a class="btn-small red"><i class="material-icons">delete</i></a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        <tbody>
+                ');
+
+                // Laço de repetição para percorrer todos os registros retornados
+                // mysqli_fetch_array pega uma linha por vez do resultado (result set)
+                while ($row = mysqli_fetch_array($resultado) ){
+
+                    // Inicia uma nova linha da tabela
+                    echo ("<tr>");
+
+                    // Exibe os dados de cada coluna
+                    // $row["campo"] acessa o valor da coluna retornada pelo banco
+                    echo ("<td> $row[nome] </td>");
+                    echo ("<td>" . $row["nasc"] . "</td>"); // concatenação como alternativa
+                    echo ("<td> $row[fone] </td>");
+                    echo ("<td> $row[email] </td>");
+                    echo ("<td> $row[sexo] </td>");
+
+                    // Coluna que exibirá os bancos onde o cliente possui conta
+                    echo ("<td>");
+
+                    // Uso do operador ternário:
+                    // condição ? valor_se_verdadeiro : valor_se_falso
+                    // Aqui verificamos se o campo é 1 (true no banco) para exibir o nome do banco
+
+                    echo ($row["bb"] == 1 ? "Banco do Brasil " : "");
+                    echo ($row["bradesco"] == 1 ? "Bradesco " : "");
+                    echo ($row["itau"] == 1 ? "Itaú " : "");
+                    echo ($row["nubank"] == 1 ? "Nubank " : "");
+
+                    echo ("</td>");
+
+                    // Coluna de ações (botões de editar e excluir)
+                    // Ainda não possuem funcionalidade, apenas interface
+                    echo ('
+                        <td>
+                            <a class="btn-small blue"><i class="material-icons">edit</i></a>
+                            <a class="btn-small red"><i class="material-icons">delete</i></a>
+                        </td>
+                    ');
+
+                    // Fecha a linha da tabela
+                    echo ("</tr>");
+                }
+
+            } else {
+                // Caso não existam registros, exibe uma mensagem simples
+                echo ("<p>Não há nenhum registro para ser exibido</p>");
+            }
+
+            // --------------------------------------------
+            // TAREFAS PARA FAZER
+            // --------------------------------------------
+            // 1º Exibir a data no formato do Brasil (dia/mes/ano)
+            // 2º Criar uma função para exibir o sexo do cliente (masculino, feminino ou intersexo)
+            // 3º Colocar os nomes dos bancos separados por ",". Será necessário alterar o código desenvolvido. Dica: usar a função "implode". 
+
+    ?>
+                            
     </div>
 
     <!-- Materialize JS -->
