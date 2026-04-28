@@ -1,4 +1,5 @@
 <?php
+
 	// ==============================
 	// ARQUIVO: processa.php
 	// ==============================
@@ -102,24 +103,16 @@
 			echo ("$erro<br>");
 		}
 	} else {
-
-		// --------------------------------------------
-		// CONEXÃO COM O BANCO DE DADOS
-		// --------------------------------------------
-		// Aqui iniciamos a comunicação com o MySQL
-		// Abre a conexão com o banco de dados MySQL, informando:
-		// o servidor ("mysql"), que pode ser o NOME DO SERVIÇO (no Docker)
-		//   ou o ENDEREÇO IP do servidor onde o banco está rodando
-		// - o usuário (root)
-		// - a senha (12345)
-		// - e o nome do banco (des_web)
-		$conn = mysqli_connect("mysql", "root", "12345", "des_web");
+		
+		// fazendo a inclusão do arquivo responsável pela conexão com o banco de dados
+		// ../ volta ao diretório anterior
+		require_once("../conecta.php");
 
 		// --------------------------------------------
 		// COMANDO SQL (CREATE DO CRUD)
 		// --------------------------------------------
 		// monta a consulta do tipo insert que deverá ser executada
-		echo $sql = "INSERT INTO clientes (nome, nasc, fone, email, sexo, senha, bb, bradesco, nubank, itau) VALUES ('$nome', '$nascimento', '$telefone', '$email', '$sexo', '$senha', $bb, $bradesco, $nubank, $itau)";
+		$sql = "INSERT INTO clientes (nome, nasc, fone, email, sexo, senha, bb, bradesco, nubank, itau) VALUES ('$nome', '$nascimento', '$telefone', '$email', '$sexo', '$senha', $bb, $bradesco, $nubank, $itau)";
 
 		// --------------------------------------------
 		// EXECUÇÃO DO SQL
