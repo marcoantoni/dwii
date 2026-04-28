@@ -104,8 +104,14 @@
 		}
 	} else {
 		
-		// fazendo a inclusão do arquivo responsável pela conexão com o banco de dados
-		// ../ volta ao diretório anterior
+		// Inclui o arquivo "conecta.php", responsável por criar a conexão com o banco de dados
+		// O uso do require_once garante que:
+		// - o arquivo será incluído apenas UMA vez (evita duplicação de conexão)
+		// - se o arquivo não for encontrado, o script será interrompido com erro fatal
+
+		// "../" indica que estamos voltando um nível na estrutura de diretórios
+		// Exemplo: se este arquivo está em /paginas/, o conecta.php está fora dessa pasta
+
 		require_once("../conecta.php");
 
 		// --------------------------------------------
