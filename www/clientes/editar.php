@@ -1,3 +1,52 @@
+<?php
+    session_start();
+
+    require_once("../conecta.php");
+
+    // recuperando o id do cliente que vem pela url
+    // faz a conversão para inteiro
+    $id_cliente = (int)$_GET["id"];
+
+    // consulta para buscar o cliente no banco de dados
+    $sql = "SELECT * FROM clientes WHERE id = $id_cliente";
+
+    // executa a consulta sql
+    // $conn é uma variavel criada dentro de conecta.php
+    $resultado = mysqli_query($conn, $sql);
+
+    // Testa se a consulta retornou exatamente 1 registro
+    if (mysqli_num_rows($resultado) == 1) {
+
+        // Se encontrou um registro, significa que o cliente já existe
+        // no banco de dados e os dados serão carregados para edição
+
+        // Armazena os dados do cliente encontrados na consulta em um array
+        $cliente = mysqli_fetch_array($resultado);
+
+        // Atribui à variável $nome o valor do campo "nome" vindo do banco de dados.
+        // Isso é feito para facilitar o uso dos dados no restante do código,
+        // deixando as variáveis mais organizadas e fáceis de manipular.
+        $nome = $cliente["nome"];
+        $nome = $cliente["nome"];
+        $nascimento = $cliente["nasc"];
+        $fone = $cliente["fone"];
+        $email = $cliente["email"];
+        $sexo = $cliente["sexo"];
+
+        // colunas que referem-se aos bancos que o cliente tem conta
+        $bb = $cliente["bb"];
+        $bradesco = $cliente["bradesco"];
+        $nubank = $cliente["nubank"];
+        $itau = $cliente["itau"];
+
+
+    } else {
+        // se não encontrou nenhum registro...
+        $_SESSION["msg"] = "Erro: registro não encontrado ou você não tem permissão de acesso";
+        $_SESSION["cor"] = "red";
+        header("location: mostrar.php");    // redireciona para o mostrar.php, que exibirá a mensagem de erro
+    }
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -49,25 +98,25 @@
 
                     <div class="input-field col s12">
                         <i class="material-icons prefix">person</i>
-                        <input type="text" name="nome" id="nome">
+                        <input type="text" name="nome" id="nome" value="<?= $nome; ?>">
                         <label for="nome">Nome</label>
                     </div>
 
                     <div class="input-field col s12 m6">
                         <i class="material-icons prefix">calendar_today</i>
-                        <input type="date" name="nasc" id="nasc">
+                        <input type="date" name="nasc" id="nasc" value="<?= $nasc; ?>">
                         <label for="nasc">Nascimento</label>
                     </div>
 
                     <div class="input-field col s12 m6">
                         <i class="material-icons prefix">phone</i>
-                        <input type="tel" name="fone" id="fone">
+                        <input type="tel" name="fone" id="fone" value="<?= $fone; ?>">
                         <label for="fone">Telefone</label>
                     </div>
 
                     <div class="input-field col s12">
                         <i class="material-icons prefix">email</i>
-                        <input type="email" name="email" id="email">
+                        <input type="email" name="email" id="email" value="<?= $email; ?>">
                         <label for="email">E-mail</label>
                     </div>
 
@@ -80,21 +129,21 @@
 
                         <p>
                             <label>
-                                <input class="with-gap" type="radio" name="sexo" value="m">
+                                <input class="with-gap" type="radio" name="sexo" value="m" <?= $sexo == 'm' ? 'checked' : ''?> >
                                 <span>Masculino</span>
                             </label>
                         </p>
 
                         <p>
                             <label>
-                                <input class="with-gap" type="radio" name="sexo" value="f">
+                                <input class="with-gap" type="radio" name="sexo" value="f" <?= $sexo == 'f' ? 'checked' : '' ?> >
                                 <span>Feminino</span>
                             </label>
                         </p>
 
                         <p>
                             <label>
-                                <input class="with-gap" type="radio" name="sexo" value="i">
+                                <input class="with-gap" type="radio" name="sexo" value="i" <?= $sexo == 'i' ? 'checked' : ''?> >
                                 <span>Intersexo</span>
                             </label>
                         </p>
@@ -109,28 +158,28 @@
 
                         <p>
                             <label>
-                                <input type="checkbox" name="bb">
+                                <input type="checkbox" name="bb" <?= $bb == 1 ? 'checked' : ''?> >
                                 <span>Banco do Brasil</span>
                             </label>
                         </p>
 
                         <p>
                             <label>
-                                <input type="checkbox" name="bradesco">
+                                <input type="checkbox" name="bradesco" <?= $bradesco == 1 ? 'checked' : ''?>>
                                 <span>Bradesco</span>
                             </label>
                         </p>
 
                         <p>
                             <label>
-                                <input type="checkbox" name="nu">
+                                <input type="checkbox" name="nu" <?= $nubank == 1 ? 'checked' : ''?>>
                                 <span>Nubank</span>
                             </label>
                         </p>
 
                         <p>
                             <label>
-                                <input type="checkbox" name="itau">
+                                <input type="checkbox" name="itau" <?= $itau == 1 ? 'checked' : ''?> >
                                 <span>Itaú</span>
                             </label>
                         </p>
@@ -154,6 +203,12 @@
                     </div>
 
                 </div>
+                <!-- 
+                    Campo oculto utilizado para armazenar o ID do cliente.
+                    Esse valor é enviado junto com o formulário sem aparecer para o usuário.
+                    É usado para identificar qual registro será alterado durante a edição. 
+                -->
+                <input type="hidden" name="id_cliente" value="<?= $id_cliente; ?>">
 
                 <!-- Botão -->
                 <div class="row">

@@ -118,16 +118,51 @@
 		// COMANDO SQL (CREATE DO CRUD)
 		// --------------------------------------------
 		// monta a consulta do tipo insert que deverá ser executada
-		$sql = "INSERT INTO clientes (nome, nasc, fone, email, sexo, senha, bb, bradesco, nubank, itau) VALUES ('$nome', '$nascimento', '$telefone', '$email', '$sexo', '$senha', $bb, $bradesco, $nubank, $itau)";
+
+		// Recebe o ID enviado pelo formulário
+		// Esse campo só vai existir quando a operação for de edição
+		$id = $_POST["id_cliente"];
+
+		// Verifica se o ID foi enviado e possui valor.
+		// Se isso acontecer, significa que o formulário está realizando
+		// uma edição de um cliente já existente no banco de dados.
+		if (isset($id) && !empty($id))
+			// sql para edição
+			$sql = "UPDATE clientes SET 
+					nome = '$nome', 
+					nasc = '$nascimento', 
+					fone = '$telefone', 
+					email = '$email', 
+					sexo = '$sexo', 
+					senha = '$senha', 
+					bb = $bb, 
+					bradesco = $bradesco, 
+					nubank = $nubank, 
+					itau = $itau
+					WHERE id = $id
+			";
+
+		else
+			// sql para inserção (não alterado)
+			$sql = "INSERT INTO clientes (nome, nasc, fone, email, sexo, senha, bb, bradesco, nubank, itau) VALUES ('$nome', '$nascimento', '$telefone', '$email', '$sexo', '$senha', $bb, $bradesco, $nubank, $itau)";
 
 		// --------------------------------------------
 		// EXECUÇÃO DO SQL
 		// --------------------------------------------
 		// Envia o comando para o banco de dados
 		if (mysqli_query($conn, $sql)) {
-			echo ("Cliente inserido com sucesso.");
+			// testa novamente se a consulta é de edição
+			if (isset($id) && !empty($id)){
+				$_SESSION["msg"] = "Cliente foi alterado com sucesso";
+				$_SESSION["cor"] = "green";
+			} else {
+				$_SESSION["msg"] = "Cliente inserido com sucesso";
+				$_SESSION["cor"] = "green";
+			}
 		} else {
-			echo ("Houve um erro na hora de salvar o cliente.");
+			// se cair aqui, é por que houve algum erro na hora de executar a consulta
+			$_SESSION["msg"] = "Houve um erro na hora de salvar o cliente";
+			$_SESSION["cor"] = "red";
 		}
 
 		// --------------------------------------------
@@ -136,5 +171,8 @@
 		// Finaliza a comunicação com o banco
 		// é necessário passar como parametro o link da conexão com o banco de dados
 		mysqli_close($conn);
+
+		// Depois de alterar/criar o registro, redireciona para a página mostrar.php
+		header("location: mostrar.php");
 	}
 ?>
