@@ -1,0 +1,32 @@
+<div class="container">
+        <div id="mensagem" class="card-panel green white-text" style="position: relative; padding-right: 50px;">
+
+            Cliente cadastrado com sucesso!
+
+            <button 
+                onclick="fecharMensagem()"
+                style="
+                    position: absolute;
+                    right: 10px;
+                    top: 8px;
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 22px;
+                    cursor: pointer;
+                ">
+                &times;
+            </button>
+
+        </div>
+
+        <script>
+
+            function fecharMensagem(){
+                document.getElementById("mensagem").style.display = "none";
+            }
+
+            // Fecha automaticamente após 5 segundos
+            setTimeout(fecharMensagem, 5000);
+
+        </script>
