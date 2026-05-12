@@ -1,3 +1,6 @@
+<?php
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -16,8 +19,45 @@
     </style>
 </head>
 <body>
-
     <div class="container">
+        <?php
+            if (isset($_SESSION["msg"])):
+        ?>
+        <div id="mensagem" class="card-panel <?= $_SESSION["cor"] ?> white-text" style="position: relative; padding-right: 50px;">
+
+            <?= $_SESSION["msg"] ?>
+
+            <button 
+                onclick="fecharMensagem()"
+                style="
+                    position: absolute;
+                    right: 10px;
+                    top: 8px;
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 22px;
+                    cursor: pointer;
+                ">
+                &times;
+            </button>
+        </div>
+        <?php
+            unset($_SESSION["cor"]);
+            unset($_SESSION["msg"]);
+            endif;
+        ?>
+
+        <script>
+
+            function fecharMensagem(){
+                document.getElementById("mensagem").style.display = "none";
+            }
+
+            // Fecha automaticamente após 5 segundos
+            setTimeout(fecharMensagem, 5000);
+
+        </script>
         <h4>Clientes Cadastrados</h4>
 
         <?php
