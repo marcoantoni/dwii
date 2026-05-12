@@ -21,12 +21,17 @@
 <body>
     <div class="container">
         <?php
+            // Verifica se existe uma mensagem salva na sessão
             if (isset($_SESSION["msg"])):
         ?>
+
+        <!-- Caixa de mensagem utilizando Materialize CSS -->
         <div id="mensagem" class="card-panel <?= $_SESSION["cor"] ?> white-text" style="position: relative; padding-right: 50px;">
 
+            <!-- Exibe o texto da mensagem armazenada na sessão, que será criada no arquivo processa.php -->
             <?= $_SESSION["msg"] ?>
 
+            <!-- Botão para fechar a mensagem -->
             <button 
                 onclick="fecharMensagem()"
                 style="
@@ -43,13 +48,16 @@
             </button>
         </div>
         <?php
+            // Remove os dados da sessão após exibir a mensagem
             unset($_SESSION["cor"]);
             unset($_SESSION["msg"]);
+
+            // Finaliza a estrutura condicional
             endif;
         ?>
 
         <script>
-
+            // função para fechar a mensagem em 5 segundos (5000 milisegundos)
             function fecharMensagem(){
                 document.getElementById("mensagem").style.display = "none";
             }
