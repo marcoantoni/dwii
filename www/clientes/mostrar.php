@@ -134,13 +134,21 @@
                     echo ("</td>");
 
                     // Coluna de ações (botões de editar e excluir)
-                    // Ainda não possuem funcionalidade, apenas interface
-                    echo ('
+                    // Obtém o ID do registro atual vindo do banco de dados
+                    $id = $row["id"];
+
+                    // Exibe os botões de editar e excluir dentro de uma célula da tabela.
+                    // Foi utilizado echo para gerar o HTML dinamicamente.
+                    // As aspas duplas permitem inserir a variável $id diretamente na URL.
+                    // O caractere \" foi utilizado para escapar as aspas internas da string.
+
+                    $id = $row["id"];
+                    echo ("
                         <td>
-                            <a class="btn-small blue"><i class="material-icons">edit</i></a>
-                            <a class="btn-small red"><i class="material-icons">delete</i></a>
+                            <a class=\"btn-small blue\" href=\"editar.php?id=$id\"><i class=\"material-icons\">edit</i></a>
+                            <a class=\"btn-small red\" href=\"excluir.php?id=$id\"><i class=\"material-icons\">delete</i></a>
                         </td>
-                    ');
+                    ");
 
                     // Fecha a linha da tabela
                     echo ("</tr>");
