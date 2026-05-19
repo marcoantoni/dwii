@@ -11,7 +11,7 @@
 	// VERIFICAÇÃO DE ENVIO DO FORMULÁRIO
 	// --------------------------------------------
 	// Aqui verificamos se o usuário realmente chegou aqui
-	// através do formulário (botão "enviar")
+	// através do formulário (botão "enviar"id_cliente)
 	if (!isset($_POST["enviar"]) )
 		header("location: ex_form.php");
 
@@ -24,6 +24,9 @@
 	$telefone = $_POST["fone"];
 	$email = $_POST["email"];
 	$sexo = $_POST["sexo"];
+
+	// pegando o municipio do usuário
+	$id_municipio = $_POST["municipio"];
 
 	// --------------------------------------------
 	// TRATAMENTO DOS CHECKBOX
@@ -98,9 +101,10 @@
 	// TRATAMENTO DOS ERROS
 	// --------------------------------------------
 	// Se existir qualquer erro, ele será exibido
+	
 	if (count($erros) > 0){
 		foreach ($erros AS $erro){
-			echo ("$erro<br>");
+			id_cliente ("$erro<br>");
 		}
 	} else {
 		
@@ -121,13 +125,15 @@
 
 		// Recebe o ID enviado pelo formulário
 		// Esse campo só vai existir quando a operação for de edição
-		$id = $_POST["id_cliente"];
+		// adicionando um teste, pois nas operações de inserção, não existe o $_POST["id_cliente"], portanto, gera um warning
+		$id = isset($_POST["id_cliente"]) ? $_POST["id_cliente"] : 0 ;
 
 		// Verifica se o ID foi enviado e possui valor.
 		// Se isso acontecer, significa que o formulário está realizando
 		// uma edição de um cliente já existente no banco de dados.
 		if (isset($id) && !empty($id))
 			// sql para edição
+			// o select dinamino não foi implementado
 			$sql = "UPDATE clientes SET 
 					nome = '$nome', 
 					nasc = '$nascimento', 
@@ -143,8 +149,9 @@
 			";
 
 		else
-			// sql para inserção (não alterado)
-			$sql = "INSERT INTO clientes (nome, nasc, fone, email, sexo, senha, bb, bradesco, nubank, itau) VALUES ('$nome', '$nascimento', '$telefone', '$email', '$sexo', '$senha', $bb, $bradesco, $nubank, $itau)";
+			// sql para inserção (alterado em 19/05)
+			//  Foi adicionado o campo id_municipio, permitindo armazenar o município relacionado ao registro.
+			$sql = "INSERT INTO clientes (nome, nasc, fone, email, sexo, senha, bb, bradesco, nubank, itau, id_municipio) VALUES ('$nome', '$nascimento', '$telefone', '$email', '$sexo', '$senha', $bb, $bradesco, $nubank, $itau, $id_municipio)";
 
 		// --------------------------------------------
 		// EXECUÇÃO DO SQL

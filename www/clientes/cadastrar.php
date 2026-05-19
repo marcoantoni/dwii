@@ -14,6 +14,20 @@
 			Telefone: <input type="tel" name="fone"> <br>
 			E-mail: <input type="email" name=email> <br>
 			Sexo: <input type="radio" name="sexo" value="m"> Masculino <input type="radio" name="sexo" value="f"> Feminino <input type="radio" name="sexo" value="i"> Inter sexo <br>
+			Em qual cidade você reside?
+			<select name="municipio">
+				<?php
+					require_once("../conecta.php");
+
+					$sql = "SELECT * FROM municipios ORDER BY nome ASC";
+
+					$resultado = mysqli_query($conn, $sql);
+
+					while ($row = mysqli_fetch_array($resultado)){
+						echo ("<option value=\"$row[id]\">$row[nome]</option>");
+					}
+				?>
+			</select>
 			Em quais bancos você tem conta?
 			 <input type="checkbox" name="bb"> Banco do Brasil <input type="checkbox" name="bradesco"> Bradesco <input type="checkbox" name="nu"> Nubank <input type="checkbox" name="itau"> Itaú <br>
 			Senha: <input type="password" name="senha"> <br>
