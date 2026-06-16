@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Usuários - API REST</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+
+<style>
+body{
+    padding:20px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h4>Usuários</h4>
+
+    <table class="striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Nascimento</th>
+                <th>Email</th>
+                <th>Tipo</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+
+        <tbody id="tabela-usuarios">
+
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+
+const API_URL =
+"http://127.0.0.1:8080/exemplo_api/usuarios.php";
+
+function tipoTexto(tipo){
+
+    switch(parseInt(tipo)){
+
+        case 1:
+            return "Administrador";
+
+        case 2:
+            return "Pessoa física";
+
+        case 3:
+            return "Pessoa jurídica";
+
+        default:
+            return "Desconhecido";
+    }
+}
+
+async function carregarUsuarios(){
+
+    const response =
+        await fetch(API_URL);
+
+    const dados =
+        await response.json();
+
+    const tabela =
+        document.getElementById(
+            "tabela-usuarios"
+        );
+
+    tabela.innerHTML = "";
+
+    dados.forEach(usuario => {
+
+        tabela.innerHTML += `
+            <tr>
+                <td>${usuario.id}</td>
+                <td>${usuario.nome}</td>
+                <td>${usuario.nascimento ?? ''}</td>
+                <td>${usuario.email}</td>
+                <td>${tipoTexto(usuario.tipo)}</td>
+
+                <td>
+
+                    <button
+                        class="btn blue"
+                        onclick="editar(
+                            ${usuario.id},
+                            '${usuario.nome}',
+                            '${usuario.email}'
+                        )">
+                        Editar
+                    </button>
+
+                    <button
+                        class="btn red"
+                        onclick="excluir(${usuario.id})">
+                        Excluir
+                    </button>
+
+                </td>
+
+            </tr>
+        `;
+    });
+}
+
+async function excluir(id){
+
+    if(!confirm("Deseja excluir?"))
+        return;
+
+    await fetch(
+        `${API_URL}?id=${id}`,
+        {
+            method:"DELETE"
+        }
+    );
+
+    carregarUsuarios();
+}
+
+async function editar(
+    id,
+    nomeAtual,
+    emailAtual
+){
+
+    const nome =
+        prompt(
+            "Novo nome:",
+            nomeAtual
+        );
+
+    const email =
+        prompt(
+            "Novo email:",
+            emailAtual
+        );
+
+    if(!nome || !email)
+        return;
+
+    await fetch(
+        `${API_URL}?id=${id}`,
+        {
+            method:"PUT",
+
+            headers:{
+                "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+                nome:nome,
+                email:email
+            })
+        }
+    );
+
+    carregarUsuarios();
+}
+
+carregarUsuarios();
+
+</script>
+
+</body>
+</html>
